@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Завтра Сделаю — Калькулятор упущенного контента</title>
+    <meta name="description" content="Узнай, сколько шортсов ты мог бы смонтировать вместо скроллинга TikTok и YouTube Shorts. Калькулятор упущенных возможностей для контент-криейторов.">
+    <meta name="keywords" content="калькулятор контента, TikTok, YouTube Shorts, продуктивность, контент-криейтор, прокрастинация, монтаж видео, шортсы, reels, мотивация">
+    <meta name="author" content="w1zardz">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://w1zardz.github.io/zavtra-sdelayu/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Завтра Сделаю — Калькулятор упущенного контента">
+    <meta property="og:description" content="Сколько шортсов ты мог бы снять вместо того, чтобы листать чужие? Посчитай свои упущенные возможности.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://w1zardz.github.io/zavtra-sdelayu/">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:image" content="https://w1zardz.github.io/zavtra-sdelayu/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Завтра Сделаю — Калькулятор упущенного контента">
+    <meta name="twitter:description" content="Сколько шортсов ты мог бы снять вместо скроллинга? Посчитай.">
+    <meta name="twitter:image" content="https://w1zardz.github.io/zavtra-sdelayu/og-image.png">
+
+    <!-- Yandex verification -->
+    <meta name="yandex-verification" content="">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Завтра Сделаю",
+        "description": "Калькулятор упущенного контента. Узнай, сколько шортсов ты мог бы создать вместо скроллинга TikTok и YouTube Shorts.",
+        "url": "https://w1zardz.github.io/zavtra-sdelayu/",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "RUB"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "w1zardz",
+            "url": "https://github.com/w1zardz"
+        },
+        "inLanguage": "ru"
+    }
+    </script>
+
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-hover: #1a1a25;
+            --border: #2a2a3a;
+            --text: #e8e8f0;
+            --text-muted: #8888a0;
+            --accent: #ff3b5c;
+            --accent-glow: rgba(255, 59, 92, 0.3);
+            --green: #00e676;
+            --green-glow: rgba(0, 230, 118, 0.3);
+            --yellow: #ffd740;
+            --blue: #448aff;
+            --radius: 16px;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100dvh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Animated background */
+        .bg-glow {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(255, 59, 92, 0.06) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(68, 138, 255, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: bgShift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-5%, -3%); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 24px 16px 48px;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 32px 0 24px;
+        }
+
+        .logo-emoji {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 12px;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--text), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        /* Card */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px 20px;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title span {
+            font-size: 1rem;
+        }
+
+        /* Slider input */
+        .slider-section {
+            margin-bottom: 20px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+        }
+
+        .slider-label-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .slider-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent);
+            font-variant-numeric: tabular-nums;
+            transition: color 0.3s;
+        }
+
+        .slider-value-unit {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 48px;
+            background: transparent;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--progress, 25%), var(--border) var(--progress, 25%), var(--border) 100%);
+        }
+
+        input[type="range"]::-moz-range-track {
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+        }
+
+        input[type="range"]::-moz-range-progress {
+            height: 6px;
+            border-radius: 3px;
+            background: var(--accent);
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow), 0 2px 8px rgba(0,0,0,0.4);
+            margin-top: -11px;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow), 0 2px 8px rgba(0,0,0,0.4);
+            border: none;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        input[type="range"]:active::-webkit-slider-thumb {
+            transform: scale(1.2);
+            box-shadow: 0 0 30px var(--accent-glow), 0 2px 12px rgba(0,0,0,0.5);
+        }
+
+        input[type="range"]:active::-moz-range-thumb {
+            transform: scale(1.2);
+        }
+
+        .slider-marks {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 2px;
+            margin-top: -4px;
+        }
+
+        .slider-marks span {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        /* Results */
+        .results {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .result-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            transition: transform 0.2s, border-color 0.3s;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: fadeUp 0.4s ease forwards;
+        }
+
+        .result-item:nth-child(1) { animation-delay: 0.05s; }
+        .result-item:nth-child(2) { animation-delay: 0.12s; }
+        .result-item:nth-child(3) { animation-delay: 0.19s; }
+        .result-item:nth-child(4) { animation-delay: 0.26s; }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-item:active {
+            transform: scale(0.98);
+        }
+
+        .result-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .result-number {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 4px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .result-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .color-red { color: var(--accent); }
+        .color-green { color: var(--green); }
+        .color-yellow { color: var(--yellow); }
+        .color-blue { color: var(--blue); }
+
+        /* Grid for two items */
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .results-grid .result-item {
+            padding: 16px;
+        }
+
+        .results-grid .result-number {
+            font-size: 1.5rem;
+        }
+
+        /* Roast message */
+        .roast {
+            background: linear-gradient(135deg, rgba(255, 59, 92, 0.1), rgba(255, 59, 92, 0.05));
+            border: 1px solid rgba(255, 59, 92, 0.2);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 4px;
+            text-align: center;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text);
+            opacity: 0;
+            animation: fadeUp 0.4s ease 0.35s forwards;
+        }
+
+        .roast strong {
+            color: var(--accent);
+        }
+
+        /* Share button */
+        .share-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 16px;
+            margin-top: 16px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s, opacity 0.15s;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            opacity: 0;
+            animation: fadeUp 0.4s ease 0.4s forwards;
+        }
+
+        .share-btn:active {
+            transform: scale(0.97);
+            opacity: 0.9;
+        }
+
+        .share-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .share-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--green);
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            z-index: 100;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+
+        .share-toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            padding-top: 48px;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        .footer-text a {
+            color: var(--text-muted);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(136, 136, 160, 0.3);
+        }
+
+        /* Article for SEO */
+        .seo-article {
+            margin-top: 32px;
+            padding: 24px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .seo-article h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .seo-article p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .seo-article p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Landscape phones */
+        @media (max-height: 500px) and (orientation: landscape) {
+            header { padding: 16px 0 12px; }
+            .logo-emoji { font-size: 2rem; margin-bottom: 8px; }
+            h1 { font-size: 1.5rem; }
+            .card { padding: 16px; }
+        }
+
+        /* Tablets and up */
+        @media (min-width: 768px) {
+            .container {
+                padding-top: 48px;
+            }
+            h1 {
+                font-size: 2.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow" aria-hidden="true"></div>
+
+    <main class="container" role="main">
+        <header>
+            <span class="logo-emoji" aria-hidden="true">📱</span>
+            <h1>Завтра Сделаю</h1>
+            <p class="subtitle">Калькулятор контента, который ты мог бы создать вместо бесконечного скроллинга</p>
+        </header>
+
+        <div class="card">
+            <div class="card-title"><span>⏱️</span> Твой ежедневный скроллинг</div>
+
+            <div class="slider-section">
+                <div class="slider-label">
+                    <span class="slider-label-text">Часов в день</span>
+                    <span class="slider-value" id="hoursValue">2<span class="slider-value-unit">ч</span></span>
+                </div>
+                <input type="range" id="hoursSlider" min="0.5" max="10" step="0.5" value="2"
+                       aria-label="Сколько часов в день ты листаешь TikTok или YouTube Shorts"
+                       aria-valuemin="0.5" aria-valuemax="10" aria-valuenow="2">
+                <div class="slider-marks">
+                    <span>0.5ч</span>
+                    <span>5ч</span>
+                    <span>10ч</span>
+                </div>
+            </div>
+        </div>
+
+        <section class="results" id="results" aria-live="polite" aria-label="Результаты расчёта">
+            <!-- Filled by JS -->
+        </section>
+
+        <div class="share-toast" id="shareToast">Скопировано!</div>
+    </main>
+
+    <script>
+        const slider = document.getElementById('hoursSlider');
+        const hoursValue = document.getElementById('hoursValue');
+        const results = document.getElementById('results');
+
+        const roasts = [
+            { min: 0.5, max: 1.5, text: 'Ладно, ещё не всё потеряно. Но каждый день <strong>без контента</strong> — это день, который работает на чужой успех.' },
+            { min: 2, max: 3.5, text: 'Ты тратишь на чужой контент больше, чем некоторые тратят на свой. <strong>Подумай об этом.</strong>' },
+            { min: 4, max: 5.5, text: 'Полсмены на заводе. Только вместо зарплаты — <strong>чужие просмотры</strong> и дофаминовая яма.' },
+            { min: 6, max: 7.5, text: 'Ты проводишь в телефоне как на полноценной работе. Разница — на работе хотя бы <strong>платят</strong>. 💀' },
+            { min: 8, max: 10, text: 'Серьёзно? Это уже не скроллинг, это <strong>профессиональный спорт</strong>. Пора монетизировать хотя бы себя.' }
+        ];
+
+        function pluralize(n, one, two, five) {
+            n = Math.abs(Math.floor(n));
+            const mod10 = n % 10;
+            const mod100 = n % 100;
+            if (mod100 >= 11 && mod100 <= 19) return five;
+            if (mod10 === 1) return one;
+            if (mod10 >= 2 && mod10 <= 4) return two;
+            return five;
+        }
+
+        function formatNumber(n) {
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0');
+        }
+
+        function calculate(hours) {
+            // ~20 min to edit one short (idea + cut + captions + export)
+            const shortsPerDay = Math.floor((hours * 60) / 20);
+            const shortsPerMonth = shortsPerDay * 30;
+            const shortsPerYear = shortsPerDay * 365;
+
+            // Average short gets 500-2000 views, viral ones 100k+
+            // Conservative: 800 avg views per short
+            const viewsPerMonth = shortsPerMonth * 800;
+            const viewsPerYear = shortsPerYear * 800;
+
+            // Course launch: assume need 50 shorts to build audience for course
+            // days delayed = 50 / shortsPerDay
+            const daysToLaunch = shortsPerDay > 0 ? Math.ceil(50 / shortsPerDay) : 999;
+
+            // Money: ~2₽ per 1000 views on YouTube Shorts in RU
+            // + potential sponsorships after 10k subs
+            const potentialMoneyYear = Math.floor(viewsPerYear * 0.002);
+
+            return { shortsPerDay, shortsPerMonth, shortsPerYear, viewsPerMonth, viewsPerYear, daysToLaunch, potentialMoneyYear };
+        }
+
+        function getRoast(hours) {
+            const r = roasts.find(r => hours >= r.min && hours <= r.max);
+            return r ? r.text : roasts[roasts.length - 1].text;
+        }
+
+        function render(hours) {
+            const data = calculate(hours);
+
+            results.innerHTML = `
+                <div class="results-grid">
+                    <div class="result-item">
+                        <span class="result-icon">🎬</span>
+                        <div class="result-number color-green">${data.shortsPerDay}</div>
+                        <div class="result-label">${pluralize(data.shortsPerDay, 'шортс', 'шортса', 'шортсов')} в день</div>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-icon">📅</span>
+                        <div class="result-number color-green">${data.shortsPerMonth}</div>
+                        <div class="result-label">${pluralize(data.shortsPerMonth, 'шортс', 'шортса', 'шортсов')} в месяц</div>
+                    </div>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-icon">👀</span>
+                    <div class="result-number color-yellow">${formatNumber(data.viewsPerMonth)}</div>
+                    <div class="result-label">потенциальных ${pluralize(data.viewsPerMonth, 'просмотр', 'просмотра', 'просмотров')} в месяц упущено</div>
+                </div>
+
+                <div class="results-grid">
+                    <div class="result-item">
+                        <span class="result-icon">🚀</span>
+                        <div class="result-number color-blue">${data.daysToLaunch}</div>
+                        <div class="result-label">${pluralize(data.daysToLaunch, 'день', 'дня', 'дней')} до запуска курса</div>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-icon">💸</span>
+                        <div class="result-number color-yellow">${formatNumber(data.potentialMoneyYear)}₽</div>
+                        <div class="result-label">упущено за год</div>
+                    </div>
+                </div>
+
+                <div class="roast">${getRoast(hours)}</div>
+
+                <button class="share-btn" onclick="shareResults()" aria-label="Поделиться результатами">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                    Поделиться результатом
+                </button>
+
+                <article class="seo-article">
+                    <h2>Почему скроллинг убивает твой контент</h2>
+                    <p>Каждый день миллионы людей тратят часы на просмотр TikTok, YouTube Shorts и Instagram Reels. Это время, которое могло бы пойти на создание собственного контента — шортсов, рилсов, подкастов или статей.</p>
+                    <p>Среднее время монтажа одного короткого видео — около 20 минут. Это значит, что за ${hours} ${pluralize(hours, 'час', 'часа', 'часов')} скроллинга можно было бы создать ${calculate(hours).shortsPerDay} ${pluralize(calculate(hours).shortsPerDay, 'видео', 'видео', 'видео')}. За месяц это ${calculate(hours).shortsPerMonth} единиц контента, который работает на тебя 24/7.</p>
+                    <p>Алгоритмы TikTok и YouTube продвигают регулярный контент. Чем больше ты публикуешь, тем быстрее растёт аудитория. Один вирусный шортс может принести 100 000+ просмотров и сотни подписчиков за ночь.</p>
+                    <p>Перестань потреблять — начни создавать. Калькулятор «Завтра Сделаю» показывает реальную цену прокрастинации в просмотрах, шортсах и деньгах.</p>
+                </article>
+            `;
+        }
+
+        function updateSlider() {
+            const val = parseFloat(slider.value);
+            const progress = ((val - 0.5) / (10 - 0.5)) * 100;
+            slider.style.setProperty('--progress', progress + '%');
+            hoursValue.innerHTML = val + '<span class="slider-value-unit">ч</span>';
+            slider.setAttribute('aria-valuenow', val);
+            render(val);
+        }
+
+        function shareResults() {
+            const hours = parseFloat(slider.value);
+            const data = calculate(hours);
+            const text = `📱 Я трачу ${hours}ч в день на скроллинг.\n\n` +
+                `За это время мог бы:\n` +
+                `🎬 Монтировать ${data.shortsPerDay} шортсов в день\n` +
+                `👀 Получать ${formatNumber(data.viewsPerMonth)} просмотров в месяц\n` +
+                `🚀 Запустить курс через ${data.daysToLaunch} дней\n\n` +
+                `Посчитай свои потери: https://w1zardz.github.io/zavtra-sdelayu/`;
+
+            if (navigator.share) {
+                navigator.share({ title: 'Завтра Сделаю', text: text }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(text).then(() => {
+                    const toast = document.getElementById('shareToast');
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 2000);
+                });
+            }
+        }
+
+        slider.addEventListener('input', updateSlider);
+        updateSlider();
+    </script>
+
+    <footer>
+        <p class="footer-text">
+            Сделано <a href="https://github.com/w1zardz" target="_blank" rel="noopener">w1zardz</a> ·
+            <a href="https://github.com/w1zardz/zavtra-sdelayu" target="_blank" rel="noopener">GitHub</a>
+        </p>
+    </footer>
+</body>
+</html>
